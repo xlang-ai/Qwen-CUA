@@ -1,0 +1,16 @@
+Qwen-CUA
+Copyright 2026 Alibaba Group and contributors
+
+This product includes software developed by the Qwen team.
+
+Parts of the Qwen computer-use prompt, multimodal history construction, relative
+coordinate conversion, and XML tool-call parsing are adapted from an internal
+OSWorld-V2 integration derived from OSWorld:
+
+  OSWorld
+  Copyright 2024 XLANG NLP Lab
+  Licensed under the Apache License, Version 2.0
+
+The adapted implementation in this repository has been rewritten around typed
+actions and a restricted Playwright executor. It does not include OSWorld cloud
+providers, evaluation tasks, credentials, or arbitrary Python execution.

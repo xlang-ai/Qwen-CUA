@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Launch Board · Qwen CUA Lab</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Qwen CUA Lab</p>
+          <h1>Launch Board</h1>
+        </div>
+        <div class="sprint">
+          <span>Sprint 24</span>
+          <strong>4 tasks</strong>
+        </div>
+      </header>
+
+      <section class="brief">
+        <div>
+          <span class="brief-label">Release readiness</span>
+          <strong>Reprioritize the board for launch day</strong>
+        </div>
+        <p>Drag cards between columns and arrange them in the requested order.</p>
+      </section>
+
+      <section class="board" aria-label="Launch sprint board">
+        <article class="column">
+          <header>
+            <span class="dot backlog"></span>
+            <h2>Backlog</h2>
+            <span class="count" data-count="backlog">2</span>
+          </header>
+          <div class="dropzone" data-column="backlog">
+            <button class="card" draggable="true" data-card="browser-tests">
+              <span class="card-tag quality">Quality</span>
+              <strong>Run browser tests</strong>
+              <small>Validate the sample app on Chromium</small>
+            </button>
+            <button class="card" draggable="true" data-card="release-notes">
+              <span class="card-tag docs">Docs</span>
+              <strong>Write release notes</strong>
+              <small>Summarize model and demo capabilities</small>
+            </button>
+          </div>
+        </article>
+
+        <article class="column">
+          <header>
+            <span class="dot progress"></span>
+            <h2>In Progress</h2>
+            <span class="count" data-count="progress">1</span>
+          </header>
+          <div class="dropzone" data-column="progress">
+            <button class="card" draggable="true" data-card="tag-release">
+              <span class="card-tag release">Release</span>
+              <strong>Tag release</strong>
+              <small>Create the public version tag</small>
+            </button>
+          </div>
+        </article>
+
+        <article class="column">
+          <header>
+            <span class="dot done"></span>
+            <h2>Done</h2>
+            <span class="count" data-count="done">1</span>
+          </header>
+          <div class="dropzone" data-column="done">
+            <button class="card" draggable="true" data-card="polish-demo">
+              <span class="card-tag product">Product</span>
+              <strong>Polish demo</strong>
+              <small>Refine operator console interactions</small>
+            </button>
+          </div>
+        </article>
+      </section>
+
+      <footer>
+        <span id="status">Board changes are saved automatically.</span>
+        <button id="reset" type="button">Reset board</button>
+      </footer>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
+

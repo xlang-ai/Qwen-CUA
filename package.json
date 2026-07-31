@@ -1,0 +1,19 @@
+{
+  "name": "qwen-cua",
+  "private": true,
+  "packageManager": "pnpm@10.26.0",
+  "scripts": {
+    "dev": "concurrently -k -n runner,web -c blue,green \"pnpm dev:runner\" \"pnpm dev:web\"",
+    "dev:runner": "python -m qwen_cua serve",
+    "dev:web": "pnpm --filter @qwen-cua/web dev",
+    "generate:api": "python scripts/export_openapi.py && pnpm --filter @qwen-cua/web exec openapi-typescript openapi.json -o lib/api-schema.d.ts",
+    "lint": "ruff check src tests scripts && pnpm --filter @qwen-cua/web lint",
+    "typecheck": "mypy src && pnpm --filter @qwen-cua/web typecheck",
+    "test": "pytest && pnpm --filter @qwen-cua/web test",
+    "build": "pnpm --filter @qwen-cua/web build",
+    "check": "pnpm generate:api && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

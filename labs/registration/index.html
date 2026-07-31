@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Applied Agents Summit · Registration</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="event-panel">
+        <p class="eyebrow">Applied Agents Summit · Hangzhou</p>
+        <h1>Build agents that can see, decide, and act.</h1>
+        <p class="lead">
+          A one-day gathering for researchers and builders working on multimodal
+          intelligence and computer use.
+        </p>
+        <div class="event-details">
+          <div><span>Date</span><strong>September 18</strong></div>
+          <div><span>Venue</span><strong>West Lake Hall</strong></div>
+          <div><span>Capacity</span><strong>240 attendees</strong></div>
+        </div>
+      </section>
+
+      <section class="form-panel">
+        <div id="form-view">
+          <p class="step">Registration · Step 1 of 1</p>
+          <h2>Reserve your place</h2>
+          <p class="support">Complete the form below. Fields marked * are required.</p>
+
+          <form id="registration-form">
+            <div class="field-row">
+              <label>
+                Full name *
+                <input id="name" name="name" autocomplete="name" required />
+              </label>
+              <label>
+                Email *
+                <input id="email" name="email" type="email" autocomplete="email" required />
+              </label>
+            </div>
+
+            <label>
+              Ticket type *
+              <select id="ticket" name="ticket" required>
+                <option value="">Choose a ticket</option>
+                <option value="researcher">Researcher</option>
+                <option value="developer">Developer</option>
+                <option value="student">Student</option>
+              </select>
+            </label>
+
+            <fieldset>
+              <legend>Workshop *</legend>
+              <label class="choice">
+                <input type="radio" name="workshop" value="browser-agents" required />
+                <span><strong>Browser agents</strong><small>Reliable visual interaction loops</small></span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="workshop" value="evaluation" />
+                <span><strong>Agent evaluation</strong><small>Designing reproducible benchmarks</small></span>
+              </label>
+            </fieldset>
+
+            <label>
+              Meal preference
+              <select id="meal" name="meal">
+                <option value="standard">Standard</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+              </select>
+            </label>
+
+            <label class="check">
+              <input id="conduct" name="conduct" type="checkbox" required />
+              <span>I accept the event code of conduct. *</span>
+            </label>
+
+            <p id="error" role="alert"></p>
+            <button class="submit" type="submit">Complete registration</button>
+          </form>
+        </div>
+
+        <div id="confirmation" hidden>
+          <div class="checkmark">✓</div>
+          <p class="step">Registration confirmed</p>
+          <h2>You’re on the list.</h2>
+          <p id="confirmation-copy" class="support"></p>
+          <div class="confirmation-card">
+            <span>Applied Agents Summit</span>
+            <strong id="confirmation-name"></strong>
+            <small>September 18 · West Lake Hall</small>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
+

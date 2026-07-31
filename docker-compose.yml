@@ -1,0 +1,31 @@
+services:
+  runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.runner
+    env_file:
+      - .env
+    environment:
+      QWEN_CUA_HOST: 0.0.0.0
+      QWEN_CUA_DOCKER: "true"
+      QWEN_CUA_WEB_ORIGIN: http://127.0.0.1:3000
+    ports:
+      - "4001:4001"
+    volumes:
+      - qwen-cua-data:/app/data
+    shm_size: "2gb"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      args:
+        NEXT_PUBLIC_RUNNER_BASE_URL: http://127.0.0.1:4001
+    depends_on:
+      - runner
+    ports:
+      - "3000:3000"
+
+volumes:
+  qwen-cua-data:
+
