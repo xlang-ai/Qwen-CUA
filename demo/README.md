@@ -4,7 +4,7 @@ This folder contains the browser-first reference agent for running Qwen-CUA
 through an OpenAI-compatible multimodal endpoint.
 
 [Project overview](../README.md) ·
-[Paper preview](../paper/Qwen-CUA-paper-preview.pdf)
+[Paper](../paper/Qwen-CUA.pdf)
 
 The demo provides:
 

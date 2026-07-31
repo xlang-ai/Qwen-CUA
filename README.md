@@ -8,11 +8,11 @@ events available to a human. It observes screenshots, reasons over the visible
 state, and acts with keyboard and mouse operations—without relying on DOM trees,
 accessibility metadata, shell access, or task-specific APIs.
 
-[Paper preview](./paper/Qwen-CUA-paper-preview.pdf) ·
+[Paper](./paper/Qwen-CUA.pdf) ·
 [Run the demo](./demo/README.md)
 
-> The full technical report is still in progress. This repository currently
-> contains a one-page paper preview and the reference browser-agent demo.
+> This repository contains the current technical report and the reference
+> browser-agent demo.
 
 ## Model and agent
 
@@ -82,20 +82,20 @@ and replay artifacts.
 
 ## Evaluation snapshot
 
-The current paper preview evaluates Qwen-CUA in a pure computer-use setting
-across eight benchmarks covering desktop control, long-horizon workflows,
-personalized and professional tasks, web interaction, and adversarial
-robustness. In the reported results, Qwen-CUA improves consistently over
-Qwen3.7 and reaches **86.2 on OSWorld-Verified**.
+The paper evaluates Qwen-CUA in a pure computer-use setting across eight
+benchmarks covering desktop control, long-horizon workflows, personalized and
+professional tasks, web interaction, and adversarial robustness. In the
+reported results, Qwen-CUA improves consistently over Qwen3.7 and reaches
+**86.2 on OSWorld-Verified**.
 
-See the [one-page paper preview](./paper/Qwen-CUA-paper-preview.pdf) for the
-abstract and main results figure.
+See the full [Qwen-CUA technical report](./paper/Qwen-CUA.pdf) for the model,
+training recipe, evaluation, deployment analysis, and appendices.
 
 ## Repository structure
 
 ```text
 Qwen-CUA/
-├── paper/    # Paper preview; full report forthcoming
+├── paper/    # Qwen-CUA technical report
 ├── demo/     # Runnable browser-agent reference implementation
 ├── LICENSE
 └── README.md
