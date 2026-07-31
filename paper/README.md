@@ -1,11 +1,10 @@
 # Qwen-CUA paper
 
-The full technical report, **Qwen-CUA: Native Computer Use for (almost)
-Everything**, is still in progress.
+The current technical report for **Qwen-CUA: Native Computer Use for (almost)
+Everything** is available here:
 
-The current repository includes a one-page preview with the title, abstract,
-and main results figure:
+- [Qwen-CUA (PDF)](./Qwen-CUA.pdf)
 
-- [Qwen-CUA paper preview](./Qwen-CUA-paper-preview.pdf)
-
-The complete paper and source will be added in a future update.
+This 20-page version covers the native computer-use interface, long-horizon
+context management, scalable verifiable training, Qwen-CUA and Qwen-CUA-Max
+evaluation, real-world deployment, hybrid tool use, and implementation details.
