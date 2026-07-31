@@ -2,247 +2,125 @@
 
 **Native Computer Use for (almost) Everything**
 
-Qwen-CUA is a screenshot-only computer-use agent that interacts through native
-keyboard and mouse actions. This repository hosts the paper preview and a
-browser-first demo for running Qwen computer-use models through an
-OpenAI-compatible multimodal endpoint.
+Qwen-CUA is a Qwen-based computer-use model and agent designed to operate
+graphical interfaces through the same visual observations and native input
+events available to a human. It observes screenshots, reasons over the visible
+state, and acts with keyboard and mouse operations—without relying on DOM trees,
+accessibility metadata, shell access, or task-specific APIs.
 
-## Paper
+[Paper preview](./paper/Qwen-CUA-paper-preview.pdf) ·
+[Run the demo](./demo/README.md)
 
-The full technical report is still in progress. For now, the repository
-includes a one-page preview containing the abstract and main results figure:
+> The full technical report is still in progress. This repository currently
+> contains a one-page paper preview and the reference browser-agent demo.
 
-- [Qwen-CUA paper preview (PDF)](./paper/Qwen-CUA-paper-preview.pdf)
+## Model and agent
+
+Qwen-CUA separates the learned computer-use policy from the runtime that safely
+connects it to an interactive environment.
+
+| Layer | Responsibility |
+| --- | --- |
+| **Qwen-CUA model** | Understand screenshots and instructions, track task progress, reason about the visible interface, and emit grounded keyboard/mouse actions. |
+| **Agent runtime** | Capture observations, manage multimodal history, validate and execute actions, request operator approval, and preserve evidence for replay and verification. |
+
+Together they form a native computer-use loop:
+
+```text
+instruction + screenshot
+          ↓
+    Qwen-CUA model
+          ↓
+  native action proposal
+          ↓
+ safety gate + execution
+          ↓
+ next screenshot / outcome
+```
+
+## Qwen-CUA model
+
+### Native computer-use interface
+
+The model operates from pixels and produces actions in a shared keyboard-and-
+mouse action space. The same interface can transfer across browsers, desktop
+applications, and websites because it does not expose hidden application state
+or depend on a bespoke integration for every tool.
+
+### Long-horizon interaction
+
+Computer-use trajectories quickly accumulate image-heavy context. Qwen-CUA
+retains recent visual evidence while folding older screenshots in chunks,
+preserving earlier reasoning and actions. This keeps context growth bounded,
+supports progress tracking, and leaves stable prefixes available for cache
+reuse during extended workflows.
+
+### Learning from verifiable experience
+
+Qwen-CUA is trained through a closed loop that combines supervised fine-tuning,
+reinforcement learning, large-scale environment rollouts, executable outcome
+verification, and trajectory filtering. The training data includes controllable
+web and desktop environments, state-grounded tasks, and personalized
+long-horizon expert trajectories.
+
+## Agent behavior
+
+A useful computer-use agent must do more than predict the next click. The
+Qwen-CUA agent is designed to:
+
+- ground each decision in the current screenshot;
+- preserve task state across long, multimodal trajectories;
+- recover from failed actions and changing interfaces;
+- check the resulting state instead of relying only on its own narration;
+- combine native interaction with specialized tools when appropriate;
+- surface sensitive operations for operator review.
+
+The reference implementation in [`demo/`](./demo/README.md) provides a
+browser-first agent runtime with an operator console, isolated Playwright
+sessions, typed action validation, approval gates, deterministic local tasks,
+and replay artifacts.
+
+## Evaluation snapshot
+
+The current paper preview evaluates Qwen-CUA in a pure computer-use setting
+across eight benchmarks covering desktop control, long-horizon workflows,
+personalized and professional tasks, web interaction, and adversarial
+robustness. In the reported results, Qwen-CUA improves consistently over
+Qwen3.7 and reaches **86.2 on OSWorld-Verified**.
+
+See the [one-page paper preview](./paper/Qwen-CUA-paper-preview.pdf) for the
+abstract and main results figure.
+
+## Repository structure
+
+```text
+Qwen-CUA/
+├── paper/    # Paper preview; full report forthcoming
+├── demo/     # Runnable browser-agent reference implementation
+├── LICENSE
+└── README.md
+```
 
 ## Demo
 
-The included sample application provides:
-
-- a Next.js operator console for starting runs and reviewing screenshots,
-  actions, approvals, and replay artifacts;
-- a FastAPI runner that owns model sessions and isolated Playwright browsers;
-- a typed `computer_use` protocol compatible with the XML tool calls used by
-  the Qwen CUA evaluation harness;
-- two deterministic local labs plus an explicitly acknowledged custom-URL mode;
-- a CLI and Docker Compose setup.
-
-> [!CAUTION]
-> Computer use can make mistakes and websites can contain prompt injection.
-> Use fresh browser contexts, avoid authenticated or high-stakes workflows, and
-> review every requested approval.
->
-> The runner is a local development service and has no authentication. Keep it
-> bound to loopback unless you add an authenticated reverse proxy.
-
-## Architecture
-
-```text
-Operator Console / CLI
-          |
-          v
-FastAPI Runner -----> OpenAI-compatible Qwen endpoint
-     |                         |
-     |                  XML computer_use
-     v                         |
-Typed Safety Gate <------------+
-     |
-     v
-Isolated Playwright Chromium
-     |
-     +---- screenshots / events / replay
-```
-
-The model never receives a DOM, accessibility tree, terminal, or browser
-automation API. It sees screenshots and emits mouse/keyboard actions on a
-normalized `0..999` coordinate grid. The runner validates those actions and
-executes them through a restricted Playwright adapter.
-
-## Prerequisites
-
-- Python 3.10+
-- Node.js 22+
-- Corepack
-- an OpenAI-compatible endpoint serving the released Qwen CUA model
-
-## Native quick start
+The demo is intentionally self-contained. Start with its own documentation:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-python -m playwright install chromium
-
-corepack enable
-corepack prepare pnpm@10.26.0 --activate
-pnpm install
-
+cd demo
 cp .env.example .env
 ```
 
-Edit `.env`:
+Then follow [`demo/README.md`](./demo/README.md) for native and Docker setup,
+configuration, the action protocol, safety boundaries, and development checks.
+The repository does not contain API credentials or model weights.
 
-```dotenv
-QWEN_CUA_BASE_URL=http://127.0.0.1:8000/v1
-QWEN_CUA_API_KEY=dummy
-QWEN_CUA_MODELS=your-model-name
-QWEN_CUA_DEFAULT_MODEL=your-model-name
-```
+## Safety
 
-Start both services:
-
-```bash
-set -a
-source .env
-set +a
-pnpm dev
-```
-
-Open <http://127.0.0.1:3000>, select a safe lab, and start a run.
-
-On Linux, if `qwen-cua doctor` reports missing browser libraries, install them
-once with `sudo python -m playwright install-deps chromium`.
-
-Run the services separately when debugging:
-
-```bash
-qwen-cua serve
-pnpm dev:web
-```
-
-## Docker Compose
-
-Docker runs Chromium headlessly; every captured frame remains visible in the
-operator console.
-
-```bash
-cp .env.example .env
-# Edit the endpoint and model values in .env.
-docker compose up --build
-```
-
-When the model endpoint runs on the Docker host, set
-`QWEN_CUA_BASE_URL=http://host.docker.internal:<port>/v1`. Linux installations
-may need to add an `extra_hosts` mapping for `host.docker.internal`.
-
-## CLI
-
-Check the endpoint and browser installation:
-
-```bash
-qwen-cua doctor
-```
-
-Run a safe lab without the web console:
-
-```bash
-qwen-cua run \
-  --scenario kanban-reprioritize \
-  --prompt "Move the cards to the target state and verify the result."
-```
-
-Run a custom URL:
-
-```bash
-qwen-cua run \
-  --scenario "" \
-  --url https://example.com \
-  --prompt "Describe the page and terminate."
-```
-
-## Model protocol
-
-The system prompt advertises one `computer_use` function. A model action looks
-like this:
-
-```xml
-<tool_call>
-<function=computer_use>
-<parameter=action>
-left_click
-</parameter>
-<parameter=coordinate>
-[500, 420]
-</parameter>
-</function>
-</tool_call>
-```
-
-Supported actions include clicks, drag, mouse movement, key presses, typing,
-vertical/horizontal scroll, wait, screenshot, `call_user`, and
-`terminate(success|failure)`. Multiple complete tool-call blocks may be
-returned in one model turn.
-
-## Safety model
-
-- Built-in labs are local, reset in a fresh browser context, and verified
-  against explicit state.
-- Custom URLs require an acknowledgement before the run starts.
-- Non-HTTP(S), credential-bearing, private, loopback, link-local, reserved, and
-  multicast targets are blocked by default.
-- Password entry, file upload, downloads, form submission, and cross-origin
-  navigation pause for operator review.
-- Uploads are selected by the operator and limited to 10 MB by default.
-- API keys and the endpoint URL are runner-only configuration. The browser
-  receives an allowlisted set of model names, never credentials.
-- Raw model responses are local replay data. Type parameters are redacted from
-  UI events to reduce accidental secret exposure.
-
-Custom URL runs are marked `unverified`. A model claiming success is not proof
-that a real-world task succeeded.
-
-## Replay artifacts
-
-Each run is stored under `data/runs/<run-id>/`:
-
-```text
-run.json
-events.jsonl
-replay.json
-screenshots/
-downloads/
-uploads/
-```
-
-The console supports SSE reconnection, screenshot scrubbing, raw response
-inspection, and replay download.
-
-## Configuration
-
-The complete local template is in [`.env.example`](./.env.example). Notable
-settings:
-
-- `QWEN_CUA_MODELS`: comma-separated model allowlist shown in the UI.
-- `QWEN_CUA_ENABLE_THINKING`: model-side thinking toggle when supported.
-- `QWEN_CUA_HISTORY_N`: maximum retained textual turns.
-- `QWEN_CUA_IMAGE_MAX`: recent screenshots retained as images.
-- `QWEN_CUA_ALLOW_PRIVATE_URLS`: opt-in private-network browsing.
-- `QWEN_CUA_MAX_CONCURRENT_RUNS`: local runner concurrency limit.
-
-## Development checks
-
-```bash
-pnpm generate:api
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm build
-# or all checks:
-pnpm check
-```
-
-Live model calls are intentionally not part of the default test suite. Unit and
-integration tests use deterministic fake model responses.
-
-## Scope and limitations
-
-- The first release supports Chromium browser workflows, not a full Linux,
-  Windows, or macOS desktop.
-- It supports OpenAI-compatible Chat Completions endpoints, not in-process
-  Transformers inference.
-- File uploads require operator selection; the agent cannot browse arbitrary
-  host files.
-- Browser safety inspection reduces risk but cannot eliminate prompt injection
-  or infer the consequence of every website action.
+Computer-use agents can make mistakes, encounter prompt injection, and trigger
+consequential interface actions. Use isolated browser contexts, avoid
+authenticated or high-stakes workflows, and require human approval for
+sensitive operations. A model declaring success is not proof that the intended
+real-world outcome was achieved.
 
 ## License
 

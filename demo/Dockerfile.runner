@@ -6,11 +6,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     QWEN_CUA_HOST=0.0.0.0 \
     QWEN_CUA_DOCKER=true
 
-COPY pyproject.toml README.md LICENSE NOTICE ./
+COPY pyproject.toml README.md ./
 COPY src ./src
 COPY labs ./labs
 RUN pip install --no-cache-dir .
 
 EXPOSE 4001
 CMD ["qwen-cua", "serve", "--host", "0.0.0.0", "--port", "4001"]
-
