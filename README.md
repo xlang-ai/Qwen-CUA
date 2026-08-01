@@ -1,126 +1,127 @@
-# Qwen-CUA
+<div align="center">
+  <img src="./assets/readme/qwen-cua-mascot.png" width="156" alt="Qwen-CUA mascot holding a mouse pointer and keyboard">
+  <h1>Qwen-CUA: Native Computer Use for (almost) Everything</h1>
+  <p>
+    A Qwen-based computer-use model and agent that sees screenshots,<br>
+    reasons over visible state, and acts through native keyboard and mouse events.
+  </p>
+  <p>
+    <a href="./paper/Qwen-CUA.pdf"><img alt="Paper" src="https://img.shields.io/badge/Paper-PDF-7457D6?style=flat-square"></a>
+    <a href="./demo/README.md"><img alt="Demo" src="https://img.shields.io/badge/Demo-Run%20locally-3A8D7C?style=flat-square"></a>
+    <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/License-Apache--2.0-4B5563?style=flat-square"></a>
+  </p>
+</div>
 
-**Native Computer Use for (almost) Everything**
+<p align="center">
+  <a href="./paper/Qwen-CUA.pdf">
+    <img src="./assets/readme/main-results.png" width="100%" alt="Qwen-CUA results across eight computer-use benchmarks">
+  </a>
+</p>
+<p align="center"><sub>Eight benchmark families, from desktop control and long-horizon work to web interaction and adversarial robustness. Click the figure for the technical report.</sub></p>
 
-Qwen-CUA is a Qwen-based computer-use model and agent designed to operate
-graphical interfaces through the same visual observations and native input
-events available to a human. It observes screenshots, reasons over the visible
-state, and acts with keyboard and mouse operations—without relying on DOM trees,
-accessibility metadata, shell access, or task-specific APIs.
+<table>
+  <tr>
+    <td align="center" width="33%"><strong>86.2</strong><br><sub>OSWorld-Verified</sub></td>
+    <td align="center" width="33%"><strong>20 images / turn</strong><br><sub>active visual history</sub></td>
+    <td align="center" width="33%"><strong>~100k vCPUs</strong><br><sub>rollout infrastructure</sub></td>
+  </tr>
+</table>
 
-[Paper](./paper/Qwen-CUA.pdf) ·
-[Run the demo](./demo/README.md)
+## One model. One native interface. Almost any software.
 
-> This repository contains the current technical report and the reference
-> browser-agent demo.
+Qwen-CUA operates from pixels rather than hidden application state. It receives the same visual evidence available to a person and produces actions in a shared keyboard-and-mouse space—without DOM trees, accessibility metadata, shell access, or task-specific APIs.
 
-## Model and agent
-
-Qwen-CUA separates the learned computer-use policy from the runtime that safely
-connects it to an interactive environment.
-
-| Layer | Responsibility |
+| **Qwen-CUA model** | **Agent runtime** |
 | --- | --- |
-| **Qwen-CUA model** | Understand screenshots and instructions, track task progress, reason about the visible interface, and emit grounded keyboard/mouse actions. |
-| **Agent runtime** | Capture observations, manage multimodal history, validate and execute actions, request operator approval, and preserve evidence for replay and verification. |
+| Understands screenshots and instructions, tracks progress, reasons about the visible interface, and proposes grounded native actions. | Captures observations, manages multimodal history, validates and executes actions, requests approval, and preserves replay evidence. |
 
-Together they form a native computer-use loop:
+## Remember what matters
 
-```text
-instruction + screenshot
-          ↓
-    Qwen-CUA model
-          ↓
-  native action proposal
-          ↓
- safety gate + execution
-          ↓
- next screenshot / outcome
+Long computer-use trajectories accumulate image-heavy context quickly. Qwen-CUA keeps a larger active visual history, then folds older screenshots in blocks so the agent can preserve task state while reusing a stable prefix.
+
+<table>
+  <tr>
+    <td width="46%" valign="top">
+      <a href="./assets/readme/visual-history.png"><img src="./assets/readme/visual-history.png" width="100%" alt="Scaling active visual history to 20 screenshots"></a>
+      <p align="center"><strong>More visual memory</strong><br><sub>Twenty recent screenshots stay active.</sub></p>
+    </td>
+    <td width="54%" valign="top">
+      <a href="./assets/readme/context-folding.png"><img src="./assets/readme/context-folding.png" width="100%" alt="Blockwise visual prefix folding for stable cache reuse"></a>
+      <p align="center"><strong>Stable long-horizon context</strong><br><sub>Blockwise folding bounds growth and improves prefix reuse.</sub></p>
+    </td>
+  </tr>
+</table>
+
+## Learn from verifiable experience
+
+Qwen-CUA scales computer-use training along two axes: broader verifiable tasks and rollout capacity across model generations, followed by successive training runs in which the current policy exposes unresolved queries and weak domains. Those diagnostics refresh both the supervised data mixture and the verifiable RL task distribution before the next run.
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="./assets/readme/training-scale.png"><img src="./assets/readme/training-scale.png" width="100%" alt="Computer-use performance scaling with model generation, verifiable tasks, and rollout infrastructure"></a>
+      <p align="center"><strong>Scaling training resources</strong><br><sub>From 1k to 40k tasks and nearly 100k vCPUs.</sub></p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="./assets/readme/successive-training-runs.png"><img src="./assets/readme/successive-training-runs.png" width="100%" alt="Evaluation scores across successive Qwen-CUA training runs on OSWorld-Verified, OSWorld 2.0, and ScienceBoard"></a>
+      <p align="center"><strong>Successive training runs</strong><br><sub>SFT data and verifiable RL tasks are refreshed between runs.</sub></p>
+    </td>
+  </tr>
+</table>
+
+Each SFT run starts from the same mid-training checkpoint instead of continually fine-tuning the previous agent checkpoint. The resulting SFT model recalibrates the RL pool with eight trial rollouts per task, retaining queries that are neither unreachable nor already saturated. Because teacher policies, data mixtures, domain coverage, and task distributions change between runs, the plotted lines connect development checkpoints rather than measuring controlled convergence or scaling.
+
+## Scale the model, scale the ceiling
+
+The same computer-use recipe extends from **Qwen-CUA (397B-A17B)** to **Qwen-CUA-Max (>1T)**. The larger model reaches **87.6 on OSWorld-Verified** and improves both binary and partial-credit performance on OSWorld 2.0.
+
+<p align="center">
+  <a href="./assets/readme/model-scaling.png">
+    <img src="./assets/readme/model-scaling.png" width="94%" alt="Qwen-CUA and Qwen-CUA-Max capacity scaling results">
+  </a>
+</p>
+
+## From benchmark to real workflows
+
+Qwen-CUA is designed for the interaction loop users actually see: inspect the page, plan, act, recover when the interface changes, and verify the result.
+
+<p align="center">
+  <a href="./assets/readme/chrome-showcase.png">
+    <img src="./assets/readme/chrome-showcase.png" width="100%" alt="Qwen computer-use agent operating in a Chrome side panel">
+  </a>
+</p>
+
+The self-contained [`demo/`](./demo/README.md) turns that loop into a local, browser-first reference agent:
+
+| **Operator console** | **Safety gates** | **Replayable runs** |
+| --- | --- | --- |
+| Inspect screenshots, actions, approvals, and raw model responses. | Pause sensitive actions and isolate every Playwright browser session. | Save events, screenshots, downloads, and deterministic verification evidence. |
+
+```bash
+git clone https://github.com/xlang-ai/Qwen-CUA.git
+cd Qwen-CUA/demo
+cp .env.example .env
 ```
 
-## Qwen-CUA model
+Then follow the [demo quick start](./demo/README.md#native-quick-start) to connect an OpenAI-compatible multimodal endpoint and launch the operator console.
 
-### Native computer-use interface
-
-The model operates from pixels and produces actions in a shared keyboard-and-
-mouse action space. The same interface can transfer across browsers, desktop
-applications, and websites because it does not expose hidden application state
-or depend on a bespoke integration for every tool.
-
-### Long-horizon interaction
-
-Computer-use trajectories quickly accumulate image-heavy context. Qwen-CUA
-retains recent visual evidence while folding older screenshots in chunks,
-preserving earlier reasoning and actions. This keeps context growth bounded,
-supports progress tracking, and leaves stable prefixes available for cache
-reuse during extended workflows.
-
-### Learning from verifiable experience
-
-Qwen-CUA is trained through a closed loop that combines supervised fine-tuning,
-reinforcement learning, large-scale environment rollouts, executable outcome
-verification, and trajectory filtering. The training data includes controllable
-web and desktop environments, state-grounded tasks, and personalized
-long-horizon expert trajectories.
-
-## Agent behavior
-
-A useful computer-use agent must do more than predict the next click. The
-Qwen-CUA agent is designed to:
-
-- ground each decision in the current screenshot;
-- preserve task state across long, multimodal trajectories;
-- recover from failed actions and changing interfaces;
-- check the resulting state instead of relying only on its own narration;
-- combine native interaction with specialized tools when appropriate;
-- surface sensitive operations for operator review.
-
-The reference implementation in [`demo/`](./demo/README.md) provides a
-browser-first agent runtime with an operator console, isolated Playwright
-sessions, typed action validation, approval gates, deterministic local tasks,
-and replay artifacts.
-
-## Evaluation snapshot
-
-The paper evaluates Qwen-CUA in a pure computer-use setting across eight
-benchmarks covering desktop control, long-horizon workflows, personalized and
-professional tasks, web interaction, and adversarial robustness. In the
-reported results, Qwen-CUA improves consistently over Qwen3.7 and reaches
-**86.2 on OSWorld-Verified**.
-
-See the full [Qwen-CUA technical report](./paper/Qwen-CUA.pdf) for the model,
-training recipe, evaluation, deployment analysis, and appendices.
-
-## Repository structure
+## Repository
 
 ```text
 Qwen-CUA/
-├── paper/    # Qwen-CUA technical report
-├── demo/     # Runnable browser-agent reference implementation
+├── paper/          # Technical report
+├── demo/           # Runnable browser-agent reference implementation
+├── assets/readme/  # Figures used in this overview
 ├── LICENSE
 └── README.md
 ```
 
-## Demo
-
-The demo is intentionally self-contained. Start with its own documentation:
-
-```bash
-cd demo
-cp .env.example .env
-```
-
-Then follow [`demo/README.md`](./demo/README.md) for native and Docker setup,
-configuration, the action protocol, safety boundaries, and development checks.
-The repository does not contain API credentials or model weights.
+> [!NOTE]
+> This release contains the technical report and reference demo. Model weights are not included in the repository.
 
 ## Safety
 
-Computer-use agents can make mistakes, encounter prompt injection, and trigger
-consequential interface actions. Use isolated browser contexts, avoid
-authenticated or high-stakes workflows, and require human approval for
-sensitive operations. A model declaring success is not proof that the intended
-real-world outcome was achieved.
+Computer-use agents can make mistakes, encounter prompt injection, and trigger consequential interface actions. Use isolated browser contexts, avoid authenticated or high-stakes workflows, and require human approval for sensitive operations. A model declaring success is not proof that the intended real-world outcome was achieved.
 
 ## License
 
