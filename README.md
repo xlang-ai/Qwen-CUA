@@ -6,6 +6,7 @@
     reasons over visible state, and acts through native keyboard and mouse events.
   </p>
   <p>
+    <a href="https://arxiv.org/abs/2608.02352"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2608.02352-B31B1B?style=flat-square"></a>
     <a href="./paper/Qwen-CUA.pdf"><img alt="Paper" src="https://img.shields.io/badge/Paper-PDF-7457D6?style=flat-square"></a>
     <a href="./demo/README.md"><img alt="Demo" src="https://img.shields.io/badge/Demo-Run%20locally-3A8D7C?style=flat-square"></a>
     <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/License-Apache--2.0-4B5563?style=flat-square"></a>
@@ -118,6 +119,22 @@ Qwen-CUA/
 
 > [!NOTE]
 > This release contains the technical report and reference demo. Model weights are not included in the repository.
+
+## Citation
+
+If you find Qwen-CUA useful in your work, please cite our technical report:
+
+```bibtex
+@misc{lu2026qwencuanativecomputeruse,
+      title={Qwen-CUA: Native Computer Use for (almost) Everything},
+      author={Dunjie Lu and Shuai Bai and Tianyi Bai and Sicheng Fan and Chang Gao and Jian Guan and Feng Hu and Mianqiu Huang and Xingyang Huang and Yizhen Jiang and Yuheng Jing and Dehui Kong and Ning Li and Dayiheng Liu and Shixuan Liu and Zheng Liu and Que Shen and Bowen Wang and Junli Wang and Chencan Wu and Rui Xie and Tianbao Xie and Zhihui Xie and Haiyang Xu and An Yang and Tao Yu and Wenzhen Yuan and Xi Zhang and Zhenru Zhang and Mingkang Zhu and Zhaoqing Zhu and Yizhong Cao and Kai Dang and Binyuan Hui and Kaixin Li and Junyang Lin and Haiquan Wang and Zekun Wang and Yiheng Xu and Fan Yan and Mengqi Yuan and Danyang Zhang and Jiajun Zhang and Zhipeng Zhang and Fan Zhou and Fan Zhou},
+      year={2026},
+      eprint={2608.02352},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2608.02352},
+}
+```
 
 ## Safety
 
