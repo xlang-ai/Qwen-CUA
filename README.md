@@ -24,14 +24,6 @@
 </p>
 <p align="center"><sub>Eight benchmark families, from desktop control and long-horizon work to web interaction and adversarial robustness. Click the figure for the technical report.</sub></p>
 
-<table>
-  <tr>
-    <td align="center" width="33%"><strong>86.2</strong><br><sub>OSWorld-Verified</sub></td>
-    <td align="center" width="33%"><strong>20 images / turn</strong><br><sub>active visual history</sub></td>
-    <td align="center" width="33%"><strong>~100k vCPUs</strong><br><sub>rollout infrastructure</sub></td>
-  </tr>
-</table>
-
 ## One model. One native interface. Almost any software.
 
 Qwen-CUA operates from pixels rather than hidden application state. It receives the same visual evidence available to a person and produces actions in a shared keyboard-and-mouse space—without DOM trees, accessibility metadata, shell access, or task-specific APIs.
