@@ -7,11 +7,15 @@
   </p>
   <p>
     <a href="https://arxiv.org/abs/2608.02352"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2608.02352-B31B1B?style=flat-square"></a>
+    <a href="https://huggingface.co/xlangai/Qwen-CUA"><img alt="Hugging Face model" src="https://img.shields.io/badge/Model-Coming%20soon-FFD21E?style=flat-square&logo=huggingface&logoColor=000"></a>
     <a href="./paper/Qwen-CUA.pdf"><img alt="Paper" src="https://img.shields.io/badge/Paper-PDF-7457D6?style=flat-square"></a>
     <a href="./demo/README.md"><img alt="Demo" src="https://img.shields.io/badge/Demo-Run%20locally-3A8D7C?style=flat-square"></a>
     <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/License-Apache--2.0-4B5563?style=flat-square"></a>
   </p>
 </div>
+
+> [!IMPORTANT]
+> **Open model release — coming soon.** We are preparing the Qwen-CUA model weights and release materials for publication at [🤗 `xlangai/Qwen-CUA`](https://huggingface.co/xlangai/Qwen-CUA). The technical report is available now at [arXiv:2608.02352](https://arxiv.org/abs/2608.02352).
 
 <p align="center">
   <a href="./paper/Qwen-CUA.pdf">
@@ -118,7 +122,7 @@ Qwen-CUA/
 ```
 
 > [!NOTE]
-> This release contains the technical report and reference demo. Model weights are not included in the repository.
+> This GitHub release contains the technical report and reference demo. Model weights will be released separately on [Hugging Face](https://huggingface.co/xlangai/Qwen-CUA) and are not stored in this repository.
 
 ## Citation
 
